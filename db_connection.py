@@ -2,7 +2,7 @@
 
 import psycopg2
 from psycopg2.extras import RealDictCursor
-from config import CONNECTION_PARAMS
+from config import CONNECTION_PARAMS, VECTOR_DIMENSION
 
 
 class DatabaseConnection:
@@ -36,11 +36,11 @@ class DatabaseConnection:
                 cur.execute("CREATE EXTENSION IF NOT EXISTS vector;")
                 
                 # Create table with vector column
-                cur.execute("""
+                cur.execute(f"""
                     CREATE TABLE IF NOT EXISTS items (
                         id SERIAL PRIMARY KEY,
                         name VARCHAR(255) NOT NULL,
-                        embedding vector(3),
+                        embedding vector({VECTOR_DIMENSION}) NOT NULL,
                         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                     );
                 """)

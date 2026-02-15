@@ -22,4 +22,4 @@ CONNECTION_PARAMS = {
 }
 
 # Vector configuration
-VECTOR_DIMENSION = 3
+VECTOR_DIMENSION = 384

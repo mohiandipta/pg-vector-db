@@ -3,9 +3,12 @@
 import numpy as np
 from db_connection import DatabaseConnection
 from vector_operations import VectorStore
+from embedding_service import EmbeddingService
 
 
 def main():
+    embedding_service = EmbeddingService()
+    
     """Run pgvector example operations."""
     
     # Initialize database connection
@@ -23,14 +26,15 @@ def main():
             # Example 1: Insert items with embeddings
             print("\n--- Inserting Items ---")
             items_data = [
-                ("apple", np.array([1.0, 0.5, 0.2])),
-                ("banana", np.array([0.9, 0.6, 0.1])),
-                ("orange", np.array([0.95, 0.55, 0.15])),
-                ("grape", np.array([0.2, 0.8, 0.9])),
-                ("blueberry", np.array([0.1, 0.7, 0.95])),
+                ("NestJS framework", None),
+                ("Python machine learning", None),
+                ("PostgreSQL database", None),
+                ("Deep learning AI", None),
+                ("Redis caching system", None),
             ]
             
-            for name, embedding in items_data:
+            for name, _ in items_data:
+                embedding = embedding_service.generate_embedding(name)
                 vector_store.insert_item(name, embedding)
             
             # Example 2: Retrieve all items
@@ -41,9 +45,10 @@ def main():
             
             # Example 3: Similarity search
             print("\n--- Similarity Search ---")
-            query_vector = np.array([0.9, 0.6, 0.15])
-            similar_items = vector_store.similarity_search(query_vector, limit=3)
-            print(f"Similar to {query_vector}:")
+            query_text = "Backend framework for Node"
+            query_embedding = embedding_service.generate_embedding(query_text)
+            similar_items = vector_store.similarity_search(query_embedding, limit=3)
+            print(f"Similar to {query_text}:")
             for item in similar_items:
                 print(f"  - {item['name']}: similarity={item['similarity']:.4f}")
             
